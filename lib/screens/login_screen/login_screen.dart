@@ -17,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   double screenWidth = 0.0;
   double screenHeight = 0.0;
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -60,26 +60,26 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget buildLoginForm() {
     return Column(
       children: [
-        buildPhoneInputField(),
+        buildEmailInputField(),
         SizedBox(height: 20),
         buildPasswordInputField(),
       ],
     );
   }
 
-  Widget buildPhoneInputField() {
+  Widget buildEmailInputField() {
     return Container(
       height: 40,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Color(0xffCF7866).withOpacity(0.4))),
       child: TextField(
-        controller: phoneController,
-        keyboardType: TextInputType.number,
+        controller: emailController,
+        keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
             border: InputBorder.none,
             contentPadding: EdgeInsets.only(left: 12, bottom: 13),
-            hintText: "Phone number",
+            hintText: "email number",
             hintStyle: GoogleFonts.inter(
                 fontWeight: FontWeight.w400,
                 fontSize: 12,

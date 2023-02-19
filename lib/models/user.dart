@@ -1,19 +1,19 @@
 class User {
   final String id;
-  final String phoneNumber;
+  final String email;
   final String birthday;
   final String fullName;
 
   User(
       {required this.id,
-      required this.phoneNumber,
+      required this.email,
       required this.birthday,
       required this.fullName});
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'phone_number': phoneNumber,
+      'email': email,
       'birthday': birthday,
       'full_name': fullName
     };
@@ -22,7 +22,7 @@ class User {
   static User fromJson(Map<String, dynamic> json) {
     return User(
         id: json['id'],
-        phoneNumber: json['phone_number'],
+        email: json['email'],
         birthday: json['birthday'],
         fullName: json['full_name']);
   }
