@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import "package:beauty_spa/bloc/auth_bloc.dart";
+import "package:beauty_spa/navigator/navigator.dart";
 import "package:beauty_spa/repositories/Auth.dart";
+import "package:beauty_spa/screens/register_screen/register_screen.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
@@ -21,6 +23,11 @@ class _LoginScreenState extends State<LoginScreen> {
   double screenHeight = 0.0;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +166,10 @@ class _LoginScreenState extends State<LoginScreen> {
             fontWeight: FontWeight.w400),
         children: [
           TextSpan(
-            recognizer: TapGestureRecognizer()..onTap = () {},
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigate.toScreen(context, RegisterScreen());
+              },
             text: 'Register here',
             style: GoogleFonts.inter(
                 color: Color(0xffCF7866),
