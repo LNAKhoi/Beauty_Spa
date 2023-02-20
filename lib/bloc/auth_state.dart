@@ -14,14 +14,14 @@ class AuthLoading extends AuthState {
   List<Object> get props => [];
 }
 
-class Auththenticated extends AuthState {
-  const Auththenticated();
+class Authenticated extends AuthState {
+  const Authenticated();
   @override
   List<Object> get props => [];
 }
 
-class UnAuththenticated extends AuthState {
-  const UnAuththenticated();
+class UnAuthenticated extends AuthState {
+  const UnAuthenticated();
   @override
   List<Object> get props => [];
 }
