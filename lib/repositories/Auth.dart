@@ -21,10 +21,20 @@ class Auth {
   }
 
   Future<void> createUserWithEmailAndPassword(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required String birthday,
+      required String fullName,
+      required String phoneNumber}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+
+      await createUserDataDocument(
+          email: email,
+          fullName: fullName,
+          birthday: birthday,
+          phoneNumber: phoneNumber);
     } catch (error) {
       print(error);
     }
@@ -43,11 +53,16 @@ class Auth {
   Future<void> createUserDataDocument(
       {required String email,
       required String birthday,
-      required String fullName}) async {
+      required String fullName,
+      required String phoneNumber}) async {
     final docUser = FirebaseFirestore.instance.collection('users').doc();
 
     final customerData = Customer(
-        id: docUser.id, email: email, birthday: birthday, fullName: fullName);
+        id: docUser.id,
+        email: email,
+        birthday: birthday,
+        fullName: fullName,
+        phoneNumber: phoneNumber);
     final customerJson = customerData.toJson();
 
     await docUser.set(customerJson);
