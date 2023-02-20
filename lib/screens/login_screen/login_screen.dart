@@ -1,15 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
+import "package:beauty_spa/bloc/auth_bloc.dart";
+import "package:beauty_spa/repositories/Auth.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -26,7 +28,10 @@ class _LoginScreenState extends State<LoginScreen> {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: buildBody(),
+      body: BlocProvider(
+        create: (context) => AuthBloc(auth: Auth()),
+        child: buildBody(),
+      ),
     );
   }
 
@@ -127,11 +132,12 @@ class _LoginScreenState extends State<LoginScreen> {
       height: 40,
       width: MediaQuery.of(context).size.width,
       child: CupertinoButton(
-        key: Key("loginButton"),
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 9),
         borderRadius: BorderRadius.all(Radius.circular(10)),
         color: Color(0xffEBA697),
-        onPressed: () {},
+        onPressed: () {
+          _authenticationWithEmailAndPassword(context);
+        },
         child: Text("Login",
             style: GoogleFonts.inter(
                 fontWeight: FontWeight.w600,
@@ -163,5 +169,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       )),
     );
+  }
+
+  void _authenticationWithEmailAndPassword(context) {
+    BlocProvider.of<AuthBloc>(context)
+        .add(SignInRequested(emailController.text, passwordController.text));
   }
 }
