@@ -1,10 +1,11 @@
-class User {
+class Customer {
+
   final String id;
   final String email;
   final String birthday;
   final String fullName;
 
-  User(
+  Customer(
       {required this.id,
       required this.email,
       required this.birthday,
@@ -19,8 +20,8 @@ class User {
     };
   }
 
-  static User fromJson(Map<String, dynamic> json) {
-    return User(
+  static Customer fromJson(Map<String, dynamic> json) {
+    return Customer(
         id: json['id'],
         email: json['email'],
         birthday: json['birthday'],
