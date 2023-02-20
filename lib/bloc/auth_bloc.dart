@@ -31,7 +31,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         // add auth.sign up here
         auth.createUserWithEmailAndPassword(
-            email: event.email, password: event.password);
+            phoneNumber: event.phoneNumber,
+            fullName: event.fullName,
+            birthday: event.birthday,
+            email: event.email,
+            password: event.password);
         emit(Authenticated());
       } catch (exception) {
         emit(AuthError(exception.toString()));
