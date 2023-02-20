@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
         decoration: InputDecoration(
             border: InputBorder.none,
             contentPadding: EdgeInsets.only(left: 12, bottom: 13),
-            hintText: "email number",
+            hintText: "Email",
             hintStyle: GoogleFonts.inter(
                 fontWeight: FontWeight.w400,
                 fontSize: 12,
