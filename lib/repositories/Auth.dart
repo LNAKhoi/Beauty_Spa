@@ -55,16 +55,20 @@ class Auth {
       required String birthday,
       required String fullName,
       required String phoneNumber}) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
+    try {
+      final docUser = FirebaseFirestore.instance.collection('users').doc();
 
-    final customerData = Customer(
-        id: docUser.id,
-        email: email,
-        birthday: birthday,
-        fullName: fullName,
-        phoneNumber: phoneNumber);
-    final customerJson = customerData.toJson();
+      final customerData = Customer(
+          id: docUser.id,
+          email: email,
+          birthday: birthday,
+          fullName: fullName,
+          phoneNumber: phoneNumber);
+      final customerJson = customerData.toJson();
 
-    await docUser.set(customerJson);
+      await docUser.set(customerJson);
+    } catch (error) {
+      print(error.toString());
+    }
   }
 }
