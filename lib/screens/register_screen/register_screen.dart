@@ -1,4 +1,3 @@
-import 'package:beauty_spa/bloc/auth_bloc.dart';
 import 'package:beauty_spa/repositories/Auth.dart';
 import 'package:beauty_spa/screens/home_screen/home_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../bloc/Auth/auth_bloc.dart';
 import '../../navigator/navigator.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -46,6 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }
 
             if (state is Authenticated) {
+              print("Authenticated");
               Navigate.toScreen(context, HomeScreen());
             }
           },

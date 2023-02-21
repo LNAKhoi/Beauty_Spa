@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-
-import "package:beauty_spa/bloc/auth_bloc.dart";
+import "package:beauty_spa/bloc/Auth/auth_bloc.dart";
 import 'package:beauty_spa/screens/home_screen/navigation.dart';
 import "package:beauty_spa/navigator/navigator.dart";
 import "package:beauty_spa/repositories/Auth.dart";
@@ -47,6 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
           if (state is Authenticated) {
             Navigate.toScreen(context, Navigation());
+          } else if (state is UnAuthenticated) {
+            return;
           }
         },
         child: buildBody(),
@@ -100,6 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
       child: TextField(
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
+        style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 12,
+            color: Color(0xffCF7866)),
         decoration: InputDecoration(
             border: InputBorder.none,
             contentPadding: EdgeInsets.only(left: 12, bottom: 13),
@@ -121,6 +126,10 @@ class _LoginScreenState extends State<LoginScreen> {
       child: TextField(
         controller: passwordController,
         obscureText: true,
+        style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 12,
+            color: Color(0xffCF7866)),
         decoration: InputDecoration(
             border: InputBorder.none,
             contentPadding: EdgeInsets.only(left: 12, bottom: 13),
@@ -194,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _authenticationWithEmailAndPassword(context) {
-    BlocProvider.of<AuthBloc>(context)
-        .add(SignInRequested(emailController.text.trim(), passwordController.text.trim()));
+    BlocProvider.of<AuthBloc>(context).add(SignInRequested(
+        emailController.text.trim(), passwordController.text.trim()));
   }
 }

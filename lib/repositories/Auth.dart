@@ -2,6 +2,7 @@
 import 'package:beauty_spa/models/customer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -59,7 +60,7 @@ class Auth {
       final docUser = FirebaseFirestore.instance.collection('users').doc();
 
       final customerData = Customer(
-          id: docUser.id,
+          id: currentUser!.uid,
           email: email,
           birthday: birthday,
           fullName: fullName,
@@ -70,5 +71,15 @@ class Auth {
     } catch (error) {
       print(error.toString());
     }
+  }
+
+  Stream<List<Customer>> readCurrentUser() {
+    print("ABC:" + currentUser!.uid);
+    return FirebaseFirestore.instance
+        .collection('users')
+        .where('id', isEqualTo: currentUser!.uid)
+        .snapshots()
+        .map((event) =>
+            event.docs.map((e) => Customer.fromJson(e.data())).toList());
   }
 }
