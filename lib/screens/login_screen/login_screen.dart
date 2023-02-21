@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import "package:beauty_spa/bloc/auth_bloc.dart";
+import 'package:beauty_spa/screens/home_screen/navigation.dart';
 import "package:beauty_spa/navigator/navigator.dart";
 import "package:beauty_spa/repositories/Auth.dart";
 import "package:beauty_spa/screens/register_screen/register_screen.dart";
@@ -11,6 +12,8 @@ import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
+
+import "../home_screen/home_screen.dart";
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,8 +38,17 @@ class _LoginScreenState extends State<LoginScreen> {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: BlocProvider(
-        create: (context) => AuthBloc(auth: Auth()),
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthError) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+          }
+
+          if (state is Authenticated) {
+            Navigate.toScreen(context, Navigation());
+          }
+        },
         child: buildBody(),
       ),
     );
@@ -183,6 +195,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _authenticationWithEmailAndPassword(context) {
     BlocProvider.of<AuthBloc>(context)
-        .add(SignInRequested(emailController.text, passwordController.text));
+        .add(SignInRequested(emailController.text.trim(), passwordController.text.trim()));
   }
 }
