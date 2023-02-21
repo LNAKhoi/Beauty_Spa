@@ -1,5 +1,6 @@
 import 'package:beauty_spa/bloc/auth_bloc.dart';
 import 'package:beauty_spa/repositories/Auth.dart';
+import 'package:beauty_spa/screens/home_screen/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../navigator/navigator.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -35,8 +38,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             image: DecorationImage(
                 image:
                     AssetImage("lib/assets/backgrounds/register_screen.png"))),
-        child: BlocProvider(
-          create: (context) => AuthBloc(auth: Auth()),
+        child: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthError) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+            }
+
+            if (state is Authenticated) {
+              Navigate.toScreen(context, HomeScreen());
+            }
+          },
           child: buildBody(),
         ),
       ),
