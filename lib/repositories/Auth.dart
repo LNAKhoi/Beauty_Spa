@@ -17,7 +17,7 @@ class Auth {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
     } catch (error) {
-      print(error);
+      throw (error);
     }
   }
 
@@ -37,7 +37,7 @@ class Auth {
           birthday: birthday,
           phoneNumber: phoneNumber);
     } catch (error) {
-      print(error);
+      rethrow;
     }
   }
 
@@ -46,7 +46,7 @@ class Auth {
       try {
         _firebaseAuth.signOut();
       } catch (error) {
-        print(error);
+        rethrow;
       }
     }
   }
@@ -69,7 +69,7 @@ class Auth {
 
       await docUser.set(customerJson);
     } catch (error) {
-      print(error.toString());
+      rethrow;
     }
   }
 

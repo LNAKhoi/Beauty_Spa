@@ -17,7 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
       try {
         // add auth.Login here
-        auth.signInWithEmailAndPassword(
+        await auth.signInWithEmailAndPassword(
             email: event.email, password: event.password);
         emit(Authenticated());
       } catch (exception) {
@@ -26,11 +26,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
-    on<SignUpRequested>((event, emit) {
+    on<SignUpRequested>((event, emit) async {
       emit(AuthLoading());
       try {
         // add auth.sign up here
-        auth.createUserWithEmailAndPassword(
+        await auth.createUserWithEmailAndPassword(
             phoneNumber: event.phoneNumber,
             fullName: event.fullName,
             birthday: event.birthday,
@@ -43,10 +43,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
-    on<SignOutRequested>((event, emit) {
+    on<SignOutRequested>((event, emit) async {
       emit(AuthLoading());
       try {
-        auth.signOut();
+        await auth.signOut();
         emit(UnAuthenticated());
       } catch (exception) {
         emit(AuthError(exception.toString()));
