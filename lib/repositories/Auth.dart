@@ -57,7 +57,7 @@ class Auth {
       required String fullName,
       required String phoneNumber}) async {
     try {
-      final docUser = FirebaseFirestore.instance.collection('users').doc();
+      final docUser = FirebaseFirestore.instance.collection('users').doc(currentUser!.uid);
 
       final customerData = Customer(
           id: currentUser!.uid,
@@ -73,13 +73,5 @@ class Auth {
     }
   }
 
-  Stream<List<Customer>> readCurrentUser() {
-    print("ABC:" + currentUser!.uid);
-    return FirebaseFirestore.instance
-        .collection('users')
-        .where('id', isEqualTo: currentUser!.uid)
-        .snapshots()
-        .map((event) =>
-            event.docs.map((e) => Customer.fromJson(e.data())).toList());
-  }
+  
 }
