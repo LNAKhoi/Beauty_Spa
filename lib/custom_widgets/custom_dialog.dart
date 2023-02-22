@@ -2,12 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../navigator/navigator.dart';
+
 class CustomDialog {
   static Future showAlert(
       {required String title,
       String? content,
-      Function? function,
+      Widget? destinationWidget,
+      String? functionText,
       required BuildContext context}) async {
+    if (functionText == null || functionText.isEmpty) {
+      functionText = "OK";
+    }
+
     return showCupertinoDialog(
         context: context,
         builder: (context) => CupertinoAlertDialog(
@@ -32,7 +39,13 @@ class CustomDialog {
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
                             color: Color(0xff413D3D))),
-                    onPressed: () => Navigator.pop(context))
+                    onPressed: () {
+                      if (destinationWidget != null) {
+                        Navigate.toScreen(context, destinationWidget!);
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    })
               ],
             ));
   }
