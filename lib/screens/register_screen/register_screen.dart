@@ -46,7 +46,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }
 
             if (state is Authenticated) {
-              print("Authenticated");
               Navigate.toScreen(context, HomeScreen());
             }
           },
