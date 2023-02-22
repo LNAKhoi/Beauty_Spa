@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import "package:beauty_spa/bloc/Auth/auth_bloc.dart";
+import "package:beauty_spa/custom_widgets/custom_dialog.dart";
 import 'package:beauty_spa/screens/home_screen/navigation.dart';
 import "package:beauty_spa/navigator/navigator.dart";
 import "package:beauty_spa/repositories/Auth.dart";
@@ -40,8 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+            CustomDialog.showAlert(
+                title: "Error", content: state.errorMessage, context: context);
           }
 
           if (state is Authenticated) {
