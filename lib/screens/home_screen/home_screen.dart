@@ -1,8 +1,9 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:beauty_spa/bloc/Data_Retrieve/data_retrieve_bloc.dart';
 import 'package:beauty_spa/custom_widgets/custom_dialog.dart';
 import 'package:beauty_spa/repositories/Auth.dart';
-import 'package:beauty_spa/repositories/CRUD.dart';
+import 'package:beauty_spa/repositories/Crud.dart';
 import 'package:beauty_spa/screens/login_screen/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,44 +29,45 @@ class _HomeScreenState extends State<HomeScreen> {
   String customerName = "";
   @override
   void initState() {
-    if (_customer == null) {
-      customerName = "";
-    }
+    requestUserRetrieve();
+    BlocProvider.of<DataRetrieveBloc>(context).add(DataRetrieveRequest());
     super.initState();
+  }
+
+  requestUserRetrieve() async {
+    _customer = await Crud().retrieveUser();
+    if (_customer != null) {
+      customerName = _customer!.fullName;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is AuthError) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(state.errorMessage)));
-        }
-        if (state is UnAuthenticated) {
-          //showAlert(context,"","You have been logget out!",Navigate.toScreen(context, destinationWidget))
-          CustomDialog.showAlert(
-              title: "Logged Out",
-              context: context,
-              destinationWidget: LoginScreen());
-        }
-      },
-      child: GestureDetector(
-        onTap: () {
-          _logOut(context);
-        },
-        child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-            stream: CRUD().readCustomerData(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                _customer = Customer.fromJson(snapshot.data!.data()!);
-                customerName = _customer!.fullName;
-              }
-              return buildBody(context);
-            }),
-      ),
-    ));
+        body: BlocListener<AuthBloc, AuthState>(listener: (context, state) {
+      if (state is AuthError) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+      }
+      if (state is UnAuthenticated) {
+        //showAlert(context,"","You have been logget out!",Navigate.toScreen(context, destinationWidget))
+        CustomDialog.showAlert(
+            title: "Logged Out",
+            context: context,
+            destinationWidget: LoginScreen());
+      }
+    }, child: BlocBuilder<DataRetrieveBloc, DataRetrieveState>(
+            builder: (context, state) {
+      if (state is DataRetrieving) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (state is DataRetrieveFailed) {
+        return Container();
+      }
+      return buildBody(context);
+    })));
   }
 
   Widget buildBody(BuildContext context) {

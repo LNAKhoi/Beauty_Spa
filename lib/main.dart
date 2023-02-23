@@ -1,3 +1,5 @@
+import 'package:beauty_spa/bloc/Data_Retrieve/data_retrieve_bloc.dart';
+import 'package:beauty_spa/repositories/Crud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -23,8 +25,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(auth: Auth()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthBloc(auth: Auth()),
+        ),
+        BlocProvider(
+          create: (context) => DataRetrieveBloc(crud: Crud()),
+        ),
+      ],
       child: MaterialApp(
         title: 'Spa Application',
         debugShowCheckedModeBanner: false,
