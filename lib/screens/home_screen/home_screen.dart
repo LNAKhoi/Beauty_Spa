@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, prefer_interpolation_to_compose_strings, unused_element
 
 import 'package:beauty_spa/bloc/Data_Retrieve/data_retrieve_bloc.dart';
 import 'package:beauty_spa/custom_widgets/custom_dialog.dart';
@@ -27,18 +27,24 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Customer? _customer;
   String customerName = "";
+  List<String> imgSources = [];
   @override
   void initState() {
-    requestUserRetrieve();
-    BlocProvider.of<DataRetrieveBloc>(context).add(DataRetrieveRequest());
+    requestDataRetrieve();
+    BlocProvider.of<DataRetrieveBloc>(context)
+        .add(CustomerDataRetrieveRequest());
+    BlocProvider.of<DataRetrieveBloc>(context)
+        .add(SalonImageListRetrieveRequest());
     super.initState();
   }
 
-  requestUserRetrieve() async {
+  requestDataRetrieve() async {
     _customer = await Crud().retrieveUser();
     if (_customer != null) {
       customerName = _customer!.fullName;
     }
+    imgSources.addAll(await Crud().retrieveSalonImages());
+    print(imgSources.toList());
   }
 
   @override
@@ -66,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (state is DataRetrieveFailed) {
         return Container();
       }
+
       return buildBody(context);
     })));
   }
@@ -78,7 +85,11 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [buildWelcomeTitle(customerName)],
+          children: [
+            buildWelcomeTitle(customerName),
+            SizedBox(height: 16),
+            buildListPhotos()
+          ],
         ),
       ),
     );
@@ -94,5 +105,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _logOut(context) {
     BlocProvider.of<AuthBloc>(context).add(SignOutRequested());
+  }
+
+  Widget buildListPhotos() {
+    return Container(
+      // decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+      height: 200,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: imgSources.length,
+          itemBuilder: ((context, index) {
+            return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Image.network(
+                  imgSources[index],
+                  fit: BoxFit.fitWidth,
+                ));
+          })),
+    );
   }
 }
