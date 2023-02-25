@@ -7,4 +7,6 @@ abstract class DataRetrieveEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class DataRetrieveRequest extends DataRetrieveEvent {}
+class CustomerDataRetrieveRequest extends DataRetrieveEvent {}
+
+class SalonImageListRetrieveRequest extends DataRetrieveEvent {}
