@@ -50,31 +50,45 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocListener<AuthBloc, AuthState>(listener: (context, state) {
-      if (state is AuthError) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(state.errorMessage)));
-      }
-      if (state is UnAuthenticated) {
-        //showAlert(context,"","You have been logget out!",Navigate.toScreen(context, destinationWidget))
-        CustomDialog.showAlert(
-            title: "Logged Out",
-            context: context,
-            destinationWidget: LoginScreen());
-      }
-    }, child: BlocBuilder<DataRetrieveBloc, DataRetrieveState>(
-            builder: (context, state) {
-      if (state is DataRetrieving) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      if (state is DataRetrieveFailed) {
-        return Container();
-      }
+        body: MultiBlocListener(
+            listeners: [
+          BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state is AuthError) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+              }
+              if (state is UnAuthenticated) {
+                //showAlert(context,"","You have been logget out!",Navigate.toScreen(context, destinationWidget))
+                CustomDialog.showAlert(
+                    title: "Logged Out",
+                    context: context,
+                    destinationWidget: LoginScreen());
+              }
+            },
+          ),
+          BlocListener<DataRetrieveBloc, DataRetrieveState>(
+            listener: (context, state) {
+              if (state is DataRetrieveFailed) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+              }
+            },
+          ),
+        ],
+            child: BlocBuilder<DataRetrieveBloc, DataRetrieveState>(
+                builder: (context, state) {
+              if (state is DataRetrieving) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is DataRetrieveFailed) {
+                return Container();
+              }
 
-      return buildBody(context);
-    })));
+              return buildBody(context);
+            })));
   }
 
   Widget buildBody(BuildContext context) {
